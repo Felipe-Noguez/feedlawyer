@@ -2,6 +2,7 @@ package br.com.noguezbrothers.feedlawyer.entities;
 
 import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
 import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -47,12 +48,21 @@ public class FuncionarioEntity implements UserDetails {
     @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY)
     private Set<FuncionarioCargoPK> funcionarioCargoPKS;
 
-    @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
-    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
+//    @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
+//    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "FUNCIONARIO_CARGO",
+            joinColumns = @JoinColumn(name = "ID_FUNCIONARIO"),
+            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
+    )
+    private Set<CargoEntity> cargos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection<? extends GrantedAuthority>) funcionarioCargoPKS;
+        return cargos;
     }
 
     @Override
