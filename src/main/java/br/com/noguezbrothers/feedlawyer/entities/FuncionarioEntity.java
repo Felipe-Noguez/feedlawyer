@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -15,7 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity(name = "FUNCIONARIO")
-public class FuncionarioEntity {
+public class FuncionarioEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FUNCIONARIO_SEQUENCIA")
@@ -38,10 +41,47 @@ public class FuncionarioEntity {
     @Column(name = "senha")
     private String senha;
 
+    @Column(name = "tipo_perfil")
+    private Integer tipoPerfil;
+
     @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY)
     private Set<FuncionarioCargoPK> funcionarioCargoPKS;
 
     @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
     private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return (Collection<? extends GrantedAuthority>) funcionarioCargoPKS;
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

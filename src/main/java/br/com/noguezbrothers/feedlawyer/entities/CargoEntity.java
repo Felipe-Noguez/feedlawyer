@@ -5,16 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@RequiredArgsConstructor
-@AllArgsConstructor
+//@RequiredArgsConstructor
+//@AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "CARGO")
-public class CargoEntity {
+@Entity
+@Table(name = "CARGO")
+public class CargoEntity implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARGO_SEQUENCIA")
@@ -25,7 +27,11 @@ public class CargoEntity {
     @Column(name = "nome")
     private String nome;
 
-    @OneToMany(mappedBy = "cargo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cargoEntity", fetch = FetchType.LAZY)
     private Set<FuncionarioCargoPK> funcionarioCargoPKS;
-    
+
+    @Override
+    public String getAuthority() {
+        return nome;
+    }
 }
