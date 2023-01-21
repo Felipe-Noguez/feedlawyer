@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -19,6 +16,8 @@ import javax.persistence.Id;
 public class ServicoFuncionarioPK {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SERVICO_FUNCIONARIO_SEQUENCIA")
+    @SequenceGenerator(name = "SERVICO_FUNCIONARIO_SEQUENCIA", sequenceName = "SEQ_SERVICO_FUNCIONARIO", allocationSize = 1)
     @Column(name = "id_servico_funcionario")
     private Integer idServicoFucionario;
 

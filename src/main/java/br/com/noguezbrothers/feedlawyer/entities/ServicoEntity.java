@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -17,6 +15,8 @@ import javax.persistence.Id;
 public class ServicoEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SERVICO_SEQUENCIA")
+    @SequenceGenerator(name = "SERVICO_SEQUENCIA", sequenceName = "SEQ_SERVICO", allocationSize = 1)
     @Column(name = "id_servico")
     private Integer idServico;
 
