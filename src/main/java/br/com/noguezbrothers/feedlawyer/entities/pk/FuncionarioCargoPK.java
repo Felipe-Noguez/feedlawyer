@@ -1,5 +1,7 @@
 package br.com.noguezbrothers.feedlawyer.entities.pk;
 
+import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
+import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,11 @@ public class FuncionarioCargoPK {
     @Column(name = "id_funcionario_cargo")
     private String idFuncionarioCargo;
 
-    @Column(name = "id_cargo")
-    private Integer idCargo;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cargo")
+    private CargoEntity cargoEntity;
 
-    @Column(name = "id_funcionario")
-    private Integer idFuncionario;
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_funcionario")
+    private FuncionarioEntity funcionarioCargo;
 }

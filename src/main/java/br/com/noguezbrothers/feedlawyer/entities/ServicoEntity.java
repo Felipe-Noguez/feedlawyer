@@ -1,11 +1,13 @@
 package br.com.noguezbrothers.feedlawyer.entities;
 
+import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -22,5 +24,12 @@ public class ServicoEntity {
 
     @Column(name = "descricao")
     private String descricao;
+
+    @OneToMany(mappedBy = "servicoEntity", fetch = FetchType.LAZY)
+    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
+
+
+    @OneToOne(mappedBy = "servicoAvaliacao", fetch =  FetchType.LAZY)
+    private AvaliacaoEntity avaliacaoEntity;
 
 }

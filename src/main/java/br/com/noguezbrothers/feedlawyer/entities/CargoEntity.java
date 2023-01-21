@@ -1,11 +1,13 @@
 package br.com.noguezbrothers.feedlawyer.entities;
 
+import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -22,5 +24,8 @@ public class CargoEntity {
 
     @Column(name = "nome")
     private String nome;
+
+    @OneToMany(mappedBy = "cargo", fetch = FetchType.LAZY)
+    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
     
 }
