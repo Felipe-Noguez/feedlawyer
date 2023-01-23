@@ -1,5 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.service;
 
+import br.com.noguezbrothers.feedlawyer.TipoPerfil;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
 import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
@@ -33,8 +34,9 @@ public class FuncionarioService {
         funcionarioEntity.setLogin(funcionarioCreateDTO.getLogin());
         funcionarioEntity.setSenha(senhaCriptografada);
 
-        CargoEntity cargo = new CargoEntity();
-        funcionarioEntity.setCargos(Set.of(cargo));
+        CargoEntity cargo = new CargoEntity(null, "ROLE_ADMINISTRADOR", new HashSet<>());
+//        funcionarioEntity.setCargos(Set.of(cargo));
+//        funcionarioEntity.setCargos(Set.of(cargo, cargo));
 
         return funcionarioConvertDTO(funcionarioRepository.save(funcionarioEntity));
     }
