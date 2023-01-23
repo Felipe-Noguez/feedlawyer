@@ -3,10 +3,7 @@ package br.com.noguezbrothers.feedlawyer.entities;
 import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
 import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -45,11 +42,11 @@ public class FuncionarioEntity implements UserDetails {
     @Column(name = "tipo_perfil")
     private Integer tipoPerfil;
 
-    @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY)
-    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
+//    @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY)
+//    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
 
-//    @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
-//    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
+    @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
+    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
