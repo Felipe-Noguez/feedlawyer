@@ -11,9 +11,8 @@ public class FuncionarioDTO {
 
     private Integer idFuncionario;
     private String nomeFuncionario;
-    private String cpf;
     private String especializacao;
     private String login;
-    private String senha;
+    private String cpf;
     private Integer tipoPerfil;
 }

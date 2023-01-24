@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.service;
 
-import br.com.noguezbrothers.feedlawyer.TipoPerfil;
+import br.com.noguezbrothers.feedlawyer.controller.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
 import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
@@ -8,11 +8,15 @@ import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import br.com.noguezbrothers.feedlawyer.repository.FuncionarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -41,6 +45,29 @@ public class FuncionarioService {
         return funcionarioConvertDTO(funcionarioRepository.save(funcionarioEntity));
     }
 
+    public PageDTO<FuncionarioDTO> listarFuncionarios(String nome, String cpf, String especializacao, Integer tipoPerfil, Integer idFuncionario, Integer page, Integer size) {
+        if (page < 0 || size < 0) {
+            throw new RuntimeException("Tamanho da página ou de elementos não podem ser menor que 0.");
+        }
+        if (size > 0) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            Page<FuncionarioEntity> funcionarioEntities = funcionarioRepository.listarFuncionarios(nome, cpf, especializacao, tipoPerfil, idFuncionario, pageRequest);
+
+            List<FuncionarioDTO> funcionariosDTO = funcionarioEntities.getContent()
+                    .stream()
+                    .map(this::funcionarioConvertDTO)
+                    .collect(Collectors.toList());
+
+            return new PageDTO<>(funcionarioEntities.getTotalElements(),
+                    funcionarioEntities.getTotalPages(),
+                    page,
+                    size,
+                    funcionariosDTO);
+        }
+        List<FuncionarioDTO> listaVazia = new ArrayList<>();
+        return new PageDTO<>(0L, 0, 0, size, listaVazia);
+    }
+
     private FuncionarioEntity funcionarioConverterEntity(FuncionarioCreateDTO funcionarioCreateDTO) {
         return new FuncionarioEntity(null,
                 funcionarioCreateDTO.getNomeFuncionario(),
@@ -60,7 +87,6 @@ public class FuncionarioService {
                 funcionarioEntity.getEspecialicazao(),
                 funcionarioEntity.getLogin(),
                 funcionarioEntity.getCpf(),
-                funcionarioEntity.getSenha(),
                 funcionarioEntity.getTipoPerfil());
     }
 }
