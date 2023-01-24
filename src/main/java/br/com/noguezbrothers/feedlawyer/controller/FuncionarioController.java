@@ -38,4 +38,9 @@ public class FuncionarioController {
                                                                      Integer size) throws RegraDeNegocioException {
         return new ResponseEntity<>(funcionarioService.listarFuncionarios(nome, cpf, especializacao, tipoPerfil, idFuncionario, page, size), HttpStatus.OK);
     }
+
+    @PutMapping("/atualizar/{cpf}")
+    public ResponseEntity<FuncionarioDTO> atualizarFuncionario(@RequestBody FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
+        return  new ResponseEntity<>(funcionarioService.atualizarFuncionario(funcionarioCreateDTO), HttpStatus.OK);
+    }
 }

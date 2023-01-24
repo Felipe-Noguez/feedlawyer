@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, Integer> {
 
@@ -22,4 +24,6 @@ public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, 
             " AND (:idFuncionario is null or :idFuncionario = func.idFuncionario)" +
             "")
     Page<FuncionarioEntity> listarFuncionarios(String nome, String cpf, String especializacao, Integer tipoPerfil, Integer idFuncionario, PageRequest pageRequest);
+
+    Optional<FuncionarioEntity> findByCpf(String cpf);
 }

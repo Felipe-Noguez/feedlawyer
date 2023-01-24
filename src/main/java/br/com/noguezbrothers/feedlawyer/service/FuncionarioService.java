@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,7 +68,25 @@ public class FuncionarioService {
                 funcionariosDTO);
     }
 
-    public FuncionarioEntity findByIdFuncionario(Integer idFuncionario) throws RegraDeNegocioException {
+    public FuncionarioDTO atualizarFuncionario(FuncionarioCreateDTO funcionario) throws RegraDeNegocioException {
+        FuncionarioEntity funcionarioEntity = buscarFuncionarioPorCpf(funcionario);
+        funcionarioEntity.setNome(funcionario.getNomeFuncionario());
+        funcionarioEntity.setCpf(funcionario.getCpf());
+        funcionarioEntity.setEspecialicazao(funcionario.getEspecializacao());
+        funcionarioEntity.setLogin(funcionario.getLogin());
+        funcionarioEntity.setSenha(passwordEncoder.encode(funcionario.getSenha()));
+        funcionarioEntity.setTipoPerfil(funcionario.getTipoPerfil());
+
+        funcionarioRepository.save(funcionarioEntity);
+
+        return funcionarioConvertDTO(funcionarioEntity);
+    }
+    public FuncionarioEntity buscarFuncionarioPorCpf(FuncionarioCreateDTO funcionario) throws RegraDeNegocioException {
+        return funcionarioRepository.findByCpf(funcionario.getCpf())
+                .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado pelo CPF " + funcionario.getCpf()));
+    }
+
+    public FuncionarioEntity buscarPorIdFuncionario(Integer idFuncionario) throws RegraDeNegocioException {
         return funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado."));
     }
