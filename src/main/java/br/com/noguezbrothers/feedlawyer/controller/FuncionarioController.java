@@ -3,6 +3,7 @@ package br.com.noguezbrothers.feedlawyer.controller;
 import br.com.noguezbrothers.feedlawyer.controller.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
+import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
 import br.com.noguezbrothers.feedlawyer.service.FuncionarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class FuncionarioController {
                                                                      @RequestParam(required = false)Integer tipoPerfil,
                                                                      @RequestParam(required = false)Integer idFuncionario,
                                                                      Integer page,
-                                                                     Integer size) {
+                                                                     Integer size) throws RegraDeNegocioException {
         return new ResponseEntity<>(funcionarioService.listarFuncionarios(nome, cpf, especializacao, tipoPerfil, idFuncionario, page, size), HttpStatus.OK);
     }
 }

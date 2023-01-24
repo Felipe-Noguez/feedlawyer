@@ -5,6 +5,7 @@ import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
 import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
 import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
+import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
 import br.com.noguezbrothers.feedlawyer.repository.FuncionarioRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -45,27 +46,32 @@ public class FuncionarioService {
         return funcionarioConvertDTO(funcionarioRepository.save(funcionarioEntity));
     }
 
-    public PageDTO<FuncionarioDTO> listarFuncionarios(String nome, String cpf, String especializacao, Integer tipoPerfil, Integer idFuncionario, Integer page, Integer size) {
+    public PageDTO<FuncionarioDTO> listarFuncionarios(String nome, String cpf, String especializacao, Integer tipoPerfil, Integer idFuncionario, Integer page, Integer size) throws RegraDeNegocioException {
         if (page < 0 || size < 0) {
-            throw new RuntimeException("Tamanho da página ou de elementos não podem ser menor que 0.");
+            throw new RegraDeNegocioException("Tamanho da página ou de elementos não podem ser menor que 0.");
         }
-        if (size > 0) {
-            PageRequest pageRequest = PageRequest.of(page, size);
-            Page<FuncionarioEntity> funcionarioEntities = funcionarioRepository.listarFuncionarios(nome, cpf, especializacao, tipoPerfil, idFuncionario, pageRequest);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<FuncionarioEntity> funcionarioEntities = funcionarioRepository.listarFuncionarios(nome, cpf, especializacao, tipoPerfil, idFuncionario, pageRequest);
 
-            List<FuncionarioDTO> funcionariosDTO = funcionarioEntities.getContent()
-                    .stream()
-                    .map(this::funcionarioConvertDTO)
-                    .collect(Collectors.toList());
+        List<FuncionarioDTO> funcionariosDTO = funcionarioEntities.getContent()
+                .stream()
+                .map(this::funcionarioConvertDTO)
+                .collect(Collectors.toList());
 
-            return new PageDTO<>(funcionarioEntities.getTotalElements(),
-                    funcionarioEntities.getTotalPages(),
-                    page,
-                    size,
-                    funcionariosDTO);
+        if (funcionariosDTO.isEmpty()) {
+            throw new RegraDeNegocioException("Dados não encontrados.");
         }
-        List<FuncionarioDTO> listaVazia = new ArrayList<>();
-        return new PageDTO<>(0L, 0, 0, size, listaVazia);
+
+        return new PageDTO<>(funcionarioEntities.getTotalElements(),
+                funcionarioEntities.getTotalPages(),
+                page,
+                size,
+                funcionariosDTO);
+    }
+
+    public FuncionarioEntity findByIdFuncionario(Integer idFuncionario) throws RegraDeNegocioException {
+        return funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado."));
     }
 
     private FuncionarioEntity funcionarioConverterEntity(FuncionarioCreateDTO funcionarioCreateDTO) {
