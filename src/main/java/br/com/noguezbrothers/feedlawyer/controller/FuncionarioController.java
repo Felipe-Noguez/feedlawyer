@@ -43,4 +43,10 @@ public class FuncionarioController {
     public ResponseEntity<FuncionarioDTO> atualizarFuncionario(@RequestBody FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
         return  new ResponseEntity<>(funcionarioService.atualizarFuncionario(funcionarioCreateDTO), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<Void> removerFuncionario(@PathVariable("cpf") String cpf) throws RegraDeNegocioException {
+        funcionarioService.removerFuncionario(cpf);
+        return ResponseEntity.noContent().build();
+    }
 }

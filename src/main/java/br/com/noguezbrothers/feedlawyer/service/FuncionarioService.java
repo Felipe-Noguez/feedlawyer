@@ -69,7 +69,7 @@ public class FuncionarioService {
     }
 
     public FuncionarioDTO atualizarFuncionario(FuncionarioCreateDTO funcionario) throws RegraDeNegocioException {
-        FuncionarioEntity funcionarioEntity = buscarFuncionarioPorCpf(funcionario);
+        FuncionarioEntity funcionarioEntity = buscarFuncionarioPorCpf(funcionario.getCpf());
         funcionarioEntity.setNome(funcionario.getNomeFuncionario());
         funcionarioEntity.setCpf(funcionario.getCpf());
         funcionarioEntity.setEspecialicazao(funcionario.getEspecializacao());
@@ -81,9 +81,13 @@ public class FuncionarioService {
 
         return funcionarioConvertDTO(funcionarioEntity);
     }
-    public FuncionarioEntity buscarFuncionarioPorCpf(FuncionarioCreateDTO funcionario) throws RegraDeNegocioException {
-        return funcionarioRepository.findByCpf(funcionario.getCpf())
-                .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado pelo CPF " + funcionario.getCpf()));
+
+    public void removerFuncionario(String cpf ) throws RegraDeNegocioException {
+        funcionarioRepository.delete(buscarFuncionarioPorCpf(cpf));
+    }
+    public FuncionarioEntity buscarFuncionarioPorCpf(String cpf) throws RegraDeNegocioException {
+        return funcionarioRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado pelo CPF " + cpf));
     }
 
     public FuncionarioEntity buscarPorIdFuncionario(Integer idFuncionario) throws RegraDeNegocioException {
