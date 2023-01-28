@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.controller;
 
-import br.com.noguezbrothers.feedlawyer.controller.paginacaodto.PageDTO;
+import br.com.noguezbrothers.feedlawyer.dto.funcionario.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;

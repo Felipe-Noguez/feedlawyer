@@ -1,4 +1,4 @@
-package br.com.noguezbrothers.feedlawyer.controller.paginacaodto;
+package br.com.noguezbrothers.feedlawyer.dto.funcionario.paginacaodto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
