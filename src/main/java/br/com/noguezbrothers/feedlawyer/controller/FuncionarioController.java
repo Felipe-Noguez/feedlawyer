@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.controller;
 
-import br.com.noguezbrothers.feedlawyer.dto.funcionario.paginacaodto.PageDTO;
+import br.com.noguezbrothers.feedlawyer.dto.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
@@ -24,7 +24,7 @@ public class FuncionarioController {
     private final FuncionarioService funcionarioService;
 
     @PostMapping("/cadastro")
-    public ResponseEntity<FuncionarioDTO> cadastrarFuncionario(@Valid @RequestBody FuncionarioCreateDTO funcionarioCreateDTO) {
+    public ResponseEntity<FuncionarioDTO> cadastrarFuncionario(@Valid @RequestBody FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(funcionarioService.cadastrarFuncionario(funcionarioCreateDTO), HttpStatus.CREATED);
     }
 

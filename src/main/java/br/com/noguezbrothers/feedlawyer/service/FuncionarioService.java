@@ -1,8 +1,9 @@
 package br.com.noguezbrothers.feedlawyer.service;
 
-import br.com.noguezbrothers.feedlawyer.dto.funcionario.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
+import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioLogadoDTO;
+import br.com.noguezbrothers.feedlawyer.dto.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
 import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
@@ -11,11 +12,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -23,15 +26,18 @@ import java.util.stream.Collectors;
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
+    private final CargoService cargoService;
     private final ObjectMapper objectMapper;
 
     private final PasswordEncoder passwordEncoder;
 
-    public FuncionarioDTO cadastrarFuncionario(FuncionarioCreateDTO funcionarioCreateDTO) {
+    public FuncionarioDTO cadastrarFuncionario(FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
 
         String senhaCriptografada = passwordEncoder.encode(funcionarioCreateDTO.getSenha());
         FuncionarioEntity funcionarioEntity = funcionarioConverterEntity(funcionarioCreateDTO);
-        //findbyid em cargo
+
+        CargoEntity cargoEntity = cargoService.buscarPorIdCargo(funcionarioCreateDTO.getTipoPerfil());
+
         funcionarioEntity.setNome(funcionarioCreateDTO.getNomeFuncionario());
         funcionarioEntity.setCpf(funcionarioCreateDTO.getCpf());
         funcionarioEntity.setEspecialicazao(funcionarioCreateDTO.getEspecializacao());
@@ -93,6 +99,18 @@ public class FuncionarioService {
     public FuncionarioEntity buscarPorIdFuncionario(Integer idFuncionario) throws RegraDeNegocioException {
         return funcionarioRepository.findById(idFuncionario)
                 .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado."));
+    }
+
+    public Optional<FuncionarioEntity> buscarPorLogin(String login) {
+        return funcionarioRepository.findByLoginContainingIgnoreCase(login);
+    }
+
+    public Integer getIdLoggerdUser () throws RegraDeNegocioException {
+        return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    }
+
+    public FuncionarioLogadoDTO getLoggedUser() throws RegraDeNegocioException {
+        return objectMapper.convertValue(buscarPorIdFuncionario(getIdLoggerdUser()), FuncionarioLogadoDTO.class);
     }
 
     private FuncionarioEntity funcionarioConverterEntity(FuncionarioCreateDTO funcionarioCreateDTO) {

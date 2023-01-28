@@ -26,4 +26,6 @@ public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, 
     Page<FuncionarioEntity> listarFuncionarios(String nome, String cpf, String especializacao, Integer tipoPerfil, Integer idFuncionario, PageRequest pageRequest);
 
     Optional<FuncionarioEntity> findByCpf(String cpf);
+
+    Optional<FuncionarioEntity> findByLoginContainingIgnoreCase(String login);
 }
