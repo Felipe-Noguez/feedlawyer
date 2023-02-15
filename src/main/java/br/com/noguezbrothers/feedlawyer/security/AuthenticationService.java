@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
 
-    private final FuncionarioService usuarioService;
+    private final FuncionarioService funcionarioService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return usuarioService.buscarPorLogin(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Email inválido!"));
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return funcionarioService.buscarPorLogin(login)
+                .orElseThrow(() -> new UsernameNotFoundException("Login inválido!"));
     }
 }
