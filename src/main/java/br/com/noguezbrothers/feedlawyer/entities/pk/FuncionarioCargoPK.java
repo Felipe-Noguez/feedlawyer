@@ -21,7 +21,7 @@ public class FuncionarioCargoPK {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FUNCIONARIO_CARGO_SEQUENCIA")
     @SequenceGenerator(name = "FUNCIONARIO_CARGO_SEQUENCIA", sequenceName = "SEQ_FUNCIONARIO_CARGO", allocationSize = 1)
     @Column(name = "id_funcionario_cargo")
-    private String idFuncionarioCargo;
+    private Integer idFuncionarioCargo;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cargo")
