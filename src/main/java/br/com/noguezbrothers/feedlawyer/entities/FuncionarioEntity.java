@@ -2,14 +2,18 @@ package br.com.noguezbrothers.feedlawyer.entities;
 
 import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
 import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import br.com.noguezbrothers.feedlawyer.enums.Situacao;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -39,27 +43,31 @@ public class FuncionarioEntity implements UserDetails {
     @Column(name = "senha")
     private String senha;
 
-    @Column(name = "tipo_perfil")
-    private Integer tipoPerfil;
+    @Column(name = "situacao")
+    @Enumerated(EnumType.ORDINAL)
+    private Situacao situacao;
 
-//    @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY)
-//    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
+    @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY)
+    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
 
     @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
     private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "FUNCIONARIO_CARGO",
-            joinColumns = @JoinColumn(name = "ID_FUNCIONARIO"),
-            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
-    )
-    private Set<CargoEntity> cargos;
+//    @JsonIgnore
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "FUNCIONARIO_CARGO",
+//            joinColumns = @JoinColumn(name = "ID_FUNCIONARIO"),
+//            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
+//    )
+//    private Set<CargoEntity> cargos;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return cargos;
+        return funcionarioCargoPKS
+                .stream()
+                .map(FuncionarioCargoPK::getCargoEntity)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -89,6 +97,6 @@ public class FuncionarioEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
