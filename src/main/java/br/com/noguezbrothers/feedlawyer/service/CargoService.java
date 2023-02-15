@@ -16,4 +16,8 @@ public class CargoService {
         return cargoRepository.findById(idCargo)
                 .orElseThrow(()-> new RegraDeNegocioException("Cargo não encontrado"));
     }
+
+    public CargoEntity buscarPorNomeCargo (String nome) {
+        return cargoRepository.findAllByNomeContainingIgnoreCase(nome);
+    }
 }
