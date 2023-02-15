@@ -1,6 +1,5 @@
 package br.com.noguezbrothers.feedlawyer.security;
 
-import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
 import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -33,16 +32,17 @@ public class TokenService {
         LocalDateTime localDateExperation = dataLocalDateTime.plusDays(Long.parseLong(expiration));
         Date dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
 
-        List<String> cargosDoUsuario = funcionarioEntity.getCargos().stream()
-                .map(CargoEntity::getAuthority)
+        List<String> cargosDoUsuario = funcionarioEntity.getFuncionarioCargoPKS().stream()
+                .map(funcionarioCargoPK -> {
+                    return funcionarioCargoPK.getCargoEntity().getAuthority();
+                })
                 .toList();
 
         return Jwts.builder()
-                .setIssuer("vemser-api")
+                .setIssuer("feedlawyer-api")
                 .claim(Claims.ID, funcionarioEntity.getIdFuncionario().toString())
                 .claim(CHAVE_CARGOS, cargosDoUsuario)
                 .claim("nome",funcionarioEntity.getNome())
-                .claim("tipoPerfil",funcionarioEntity.getTipoPerfil())
                 .setIssuedAt(date)
                 .setExpiration(dateExperition)
                 .signWith(SignatureAlgorithm.HS256, secret)
