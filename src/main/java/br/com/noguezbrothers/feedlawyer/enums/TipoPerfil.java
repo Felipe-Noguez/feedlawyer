@@ -1,7 +1,7 @@
-package br.com.noguezbrothers.feedlawyer;
+package br.com.noguezbrothers.feedlawyer.enums;
 
 public enum TipoPerfil {
-    ADMINISTRADOR(1), ADVOGADO(2), CLIENTE(3);
+    ADMINISTRADOR(0), ADVOGADO(1), CLIENTE(2);
 
     private Integer tipoPerfil;
 
