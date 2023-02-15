@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CargoRepository extends JpaRepository<CargoEntity, Integer> {
+
+    CargoEntity findAllByNomeContainingIgnoreCase(String nome);
 }
