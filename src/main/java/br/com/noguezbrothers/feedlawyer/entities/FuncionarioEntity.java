@@ -47,29 +47,11 @@ public class FuncionarioEntity implements UserDetails {
     @Enumerated(EnumType.ORDINAL)
     private Situacao situacao;
 
-    //Para persistir um conjunto de cargos, foi necessário inserir o cascade
     @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<FuncionarioCargoPK> funcionarioCargoPKS;
 
     @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
     private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
-
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "FUNCIONARIO_CARGO",
-//            joinColumns = @JoinColumn(name = "ID_FUNCIONARIO"),
-//            inverseJoinColumns = @JoinColumn(name = "ID_CARGO")
-//    )
-//    private Set<CargoEntity> cargos;
-
-//    public FuncionarioEntity() {
-//        funcionarioCargoPKS = new HashSet<>();
-//    }
-
-//    public void addFuncionarioCargo(FuncionarioCargoPK funcionarioCargoPK) {
-//        funcionarioCargoPKS.add(funcionarioCargoPK);
-//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
