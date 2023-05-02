@@ -3,7 +3,6 @@ package br.com.noguezbrothers.feedlawyer.service;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioLogadoDTO;
-import br.com.noguezbrothers.feedlawyer.dto.funcionariocargtodto.FuncionarioCargoCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionariocargtodto.FuncionarioCargoDTO;
 import br.com.noguezbrothers.feedlawyer.dto.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
@@ -47,73 +46,135 @@ public class FuncionarioService {
         String senhaCriptografada = passwordEncoder.encode(funcionarioCreateDTO.getSenha());
 
         FuncionarioEntity funcionarioEntity = funcionarioConverterEntity(funcionarioCreateDTO);
-        FuncionarioCargoPK funcionarioCargoPK = new FuncionarioCargoPK();
-        CargoEntity cargo;
+        Set<FuncionarioCargoPK> funcionarioCargoPKs = new HashSet<>();
 
-//        CargoEntity cargoEntity = cargoService.buscarPorIdCargo(funcionarioCreateDTO.getTipoPerfil());
-
-        funcionarioEntity.setNome(funcionarioCreateDTO.getFuncionario());
-        funcionarioEntity.setCpf(funcionarioCreateDTO.getCpf());
-        funcionarioEntity.setEspecialicazao(funcionarioCreateDTO.getEspecializacao());
-        funcionarioEntity.setLogin(funcionarioCreateDTO.getLogin());
         funcionarioEntity.setSenha(senhaCriptografada);
         funcionarioEntity.setSituacao(Situacao.ATIVO);
 
+        funcionarioCreateDTO.getCargos().stream()
+                .map(cargoEntity -> {
+                            CargoEntity cargo = cargoService.buscarPorNomeCargo(cargoEntity.getNome());
+                            FuncionarioCargoPK funcionarioCargoPK = new FuncionarioCargoPK();
+                            funcionarioCargoPK.setCargoEntity(cargo);
+                            funcionarioCargoPK.setFuncionarioCargo(funcionarioEntity);
+                            funcionarioCargoPKs.add(funcionarioCargoPK);
 
-//        CargoEntity cargo = new CargoEntity(null, "ROLE_ADMINISTRADOR", new HashSet<>());
+                            return cargo;
+                        }
+                )
+                .collect(Collectors.toSet());
 
-//        ===========================================================
-//        Set<CargoEntity> cargoEntities = funcionarioCreateDTO.getCargos()
-//                .stream()
-//                .map(cargoEntity1 -> {
-//                        CargoEntity cargo = cargoService.buscarPorNomeCargo(cargoEntity1.getNome());
-//                        funcionarioCargoPK.setCargoEntity(cargo);
-//
-//                        return cargo;
-//                        }
-//                )
-//                .collect(Collectors.toSet());
-//        =============================================================
+        funcionarioEntity.setFuncionarioCargoPKS(funcionarioCargoPKs);
 
-
-//        funcionarioEntity.setFuncionarioCargoPKS(cargoEntities);
-//        funcionarioEntity.setFuncionarioCargoPKS();
-
-
-//        funcionarioEntity.setCargos(Set.of(cargo));
-//        funcionarioEntity.setCargos(Set.of(cargo, cargo));
-
-//        for (int i = 0; i < funcionarioCreateDTO.getCargos().size(); i++) {
-//            CargoEntity cargo = cargoService.buscarPorNomeCargo(funcionarioCreateDTO.getCargos());
-//            funcionarioCargoPK.setCargoEntity(cargo);
-//            funcionarioEntity.getFuncionarioCargoPKS().add(funcionarioCargoPK);
-//        }
-
-        Set<FuncionarioCargoPK> cargoPKSet = new HashSet<>();
-        FuncionarioCargoPK funcionarioCargoPK1 = new FuncionarioCargoPK();
-        for (FuncionarioCargoCreateDTO elemento : funcionarioCreateDTO.getCargos()) {
-            cargo = cargoService.buscarPorNomeCargo(elemento.getNome());
-
-            funcionarioCargoPK1.setCargoEntity(cargo);
-//            funcionarioCargoPK.setCargoEntity(cargo);
-//            funcionarioEntity.getFuncionarioCargoPKS().add(funcionarioCargoPK);
-            cargoPKSet.add(funcionarioCargoPK1);
-//            funcionarioCargoPK.setCargoEntity(funcionarioCargoPK1.getCargoEntity());
-        }
-
-        for (FuncionarioCargoPK cargoPK : cargoPKSet) {
-            System.out.println(cargoPK.getCargoEntity().getNome());
-        }
-        funcionarioEntity.setFuncionarioCargoPKS(cargoPKSet);
-        funcionarioCargoPK.setFuncionarioCargo(funcionarioEntity);
-        funcionarioCargoPK.setCargoEntity(funcionarioCargoPK1.getCargoEntity());
-
-//        funcionarioCargoPK.getFuncionarioCargo().getFuncionarioCargoPKS().addAll(cargoEntities);
-//        funcionarioCargoPK.setCargoEntity(cargoEntities);
-        funcionarioCargoRepository.save(funcionarioCargoPK);
+        funcionarioRepository.save(funcionarioEntity);
 
         return funcionarioConvertDTO(funcionarioEntity);
     }
+
+//    public FuncionarioDTO cadastrarFuncionario(FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
+//        Optional<FuncionarioEntity> funcionario = buscarPorLogin(funcionarioCreateDTO.getLogin());
+//        if (funcionario.isPresent()) {
+//            throw new RegraDeNegocioException("Login informado já cadastrado.");
+//        }
+//
+//        String senhaCriptografada = passwordEncoder.encode(funcionarioCreateDTO.getSenha());
+//
+//        FuncionarioEntity funcionarioEntity = funcionarioConverterEntity(funcionarioCreateDTO);
+//        Set<FuncionarioCargoPK> cargos = new HashSet<>();
+//
+//        funcionarioEntity.setSenha(senhaCriptografada);
+//        funcionarioEntity.setSituacao(funcionarioCreateDTO.getSituacao());
+//
+//        for (FuncionarioCargoCreateDTO cargoDTO : funcionarioCreateDTO.getCargos()) {
+//            CargoEntity cargoEntity = cargoService.buscarPorNomeCargo(cargoDTO.getNome());
+//            FuncionarioCargoPK funcionarioCargo = new FuncionarioCargoPK();
+//            funcionarioCargo.setCargoEntity(cargoEntity);
+//            funcionarioCargo.setFuncionarioCargo(funcionarioEntity);
+//
+//            funcionarioEntity.getFuncionarioCargoPKS().add(funcionarioCargo);
+//            cargos.add(funcionarioCargo);
+//        }
+//
+//        funcionarioEntity.setFuncionarioCargoPKS(cargos);
+//        funcionarioRepository.save(funcionarioEntity);
+//
+//        return funcionarioConvertDTO(funcionarioEntity);
+//    }
+
+//    public FuncionarioDTO cadastrarFuncionario(FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
+//        Optional<FuncionarioEntity> funcionario = buscarPorLogin(funcionarioCreateDTO.getLogin());
+//        if (funcionario.isPresent()) {
+//            throw new RegraDeNegocioException("Login informado já cadastrado.");
+//        }
+//
+//        String senhaCriptografada = passwordEncoder.encode(funcionarioCreateDTO.getSenha());
+//
+//        FuncionarioEntity funcionarioEntity = new FuncionarioEntity();
+//        funcionarioEntity.setNome(funcionarioCreateDTO.getFuncionario());
+//        funcionarioEntity.setLogin(funcionarioCreateDTO.getLogin());
+//        funcionarioEntity.setSenha(senhaCriptografada);
+//        funcionarioEntity.setSituacao(funcionarioCreateDTO.getSituacao());
+//        funcionarioEntity.setCpf(funcionarioCreateDTO.getCpf());
+//        funcionarioEntity.setEspecialicazao(funcionarioCreateDTO.getEspecializacao());
+//
+//        Set<FuncionarioCargoPK> cargos = new HashSet<>();
+//        for (FuncionarioCargoCreateDTO cargoDTO : funcionarioCreateDTO.getCargos()) {
+//            CargoEntity cargoEntity = cargoService.buscarPorNomeCargo(cargoDTO.getNome());
+//
+//            FuncionarioCargoPK funcionarioCargo = new FuncionarioCargoPK();
+//            funcionarioCargo.setCargoEntity(cargoEntity);
+//            funcionarioCargo.setFuncionarioCargo(funcionarioEntity);
+//
+//            cargos.add(funcionarioCargo);
+//        }
+//
+//        funcionarioEntity.setFuncionarioCargoPKS(cargos);
+//        funcionarioRepository.save(funcionarioEntity);
+//
+//        return funcionarioConvertDTO(funcionarioEntity);
+//    }
+
+//    public FuncionarioDTO cadastrarFuncionario(FuncionarioCreateDTO funcionarioCreateDTO) {
+//        // Cria um novo FuncionarioEntity com os valores do DTO
+//        FuncionarioEntity funcionario = new FuncionarioEntity();
+//        funcionario.setNome(funcionarioCreateDTO.getFuncionario());
+//        funcionario.setCpf(funcionarioCreateDTO.getCpf());
+//        funcionario.setEspecialicazao(funcionarioCreateDTO.getEspecializacao());
+//        funcionario.setLogin(funcionarioCreateDTO.getLogin());
+//        funcionario.setSenha(funcionarioCreateDTO.getSenha());
+//        funcionario.setSituacao(funcionarioCreateDTO.getSituacao());
+//
+//        // Cria um HashSet vazio para os cargos
+//        Set<CargoEntity> cargos = new HashSet<>();
+//
+//        // Para cada FuncionarioCargoCreateDTO no HashSet de cargos do FuncionarioCreateDTO
+//        for (FuncionarioCargoCreateDTO cargoCreateDTO : funcionarioCreateDTO.getCargos()) {
+//            // Busca o CargoEntity correspondente pelo nome
+//            Optional<CargoEntity> optionalCargo = Optional.ofNullable(cargoService.buscarPorNomeCargo(cargoCreateDTO.getNome()));
+//            if (optionalCargo.isPresent()) {
+//                // Se encontrou o CargoEntity, adiciona à lista de cargos do FuncionarioEntity
+//                cargos.add(optionalCargo.get());
+//            } else {
+//                // Se não encontrou o CargoEntity, lança uma exceção
+//                throw new RuntimeException("Cargo " + cargoCreateDTO.getNome() + " não encontrado.");
+//            }
+//        }
+//
+//        // Adiciona a lista de cargos ao FuncionarioEntity
+//        for (CargoEntity cargo : cargos) {
+//            FuncionarioCargoPK funcionarioCargoPK = new FuncionarioCargoPK();
+//            funcionarioCargoPK.setCargoEntity(cargo);
+//            funcionarioCargoPK.setFuncionarioCargo(funcionario);
+//            funcionario.addFuncionarioCargo(funcionarioCargoPK);
+//        }
+//
+//        // Salva o FuncionarioEntity no banco de dados
+//        FuncionarioEntity funcionarioSalvo = funcionarioRepository.save(funcionario);
+//
+//        // Retorna um FuncionarioDTO com os valores do FuncionarioEntity salvo
+//        return funcionarioConvertDTO(funcionarioSalvo);
+//    }
+
 
     public PageDTO<FuncionarioDTO> listarFuncionarios(String nome, String cpf, String especializacao, Integer idFuncionario, Integer cargo, Situacao situacao, Integer page, Integer size) throws RegraDeNegocioException {
         if (page < 0 || size < 0) {
@@ -152,9 +213,10 @@ public class FuncionarioService {
         return funcionarioConvertDTO(funcionarioEntity);
     }
 
-    public void removerFuncionario(String cpf ) throws RegraDeNegocioException {
+    public void removerFuncionario(String cpf) throws RegraDeNegocioException {
         funcionarioRepository.delete(buscarFuncionarioPorCpf(cpf));
     }
+
     public FuncionarioEntity buscarFuncionarioPorCpf(String cpf) throws RegraDeNegocioException {
         return funcionarioRepository.findByCpf(cpf)
                 .orElseThrow(() -> new RegraDeNegocioException("Funcionario não encontrado pelo CPF " + cpf));
@@ -169,7 +231,7 @@ public class FuncionarioService {
         return funcionarioRepository.findByLoginContainingIgnoreCase(login);
     }
 
-    public Integer getIdLoggerdUser () throws RegraDeNegocioException {
+    public Integer getIdLoggerdUser() throws RegraDeNegocioException {
         return Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
 
@@ -192,7 +254,7 @@ public class FuncionarioService {
     private FuncionarioDTO funcionarioConvertDTO(FuncionarioEntity funcionarioEntity) {
         Set<FuncionarioCargoDTO> cargos = funcionarioEntity.getFuncionarioCargoPKS().stream()
                 .map(cargo -> {
-                        return funcionarioCargoService.converterFuncionarioCargoDTO(cargo);
+                    return funcionarioCargoService.converterFuncionarioCargoDTO(cargo);
                 })
                 .collect(Collectors.toSet());
 
