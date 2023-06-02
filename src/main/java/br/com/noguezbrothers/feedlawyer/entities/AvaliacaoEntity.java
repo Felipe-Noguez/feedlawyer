@@ -39,7 +39,7 @@ public class AvaliacaoEntity {
     @Column(name = "email_cliente")
     private String emailCliente;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_avaliacao")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_servico")
     private ServicoEntity servicoAvaliacao;
 }
