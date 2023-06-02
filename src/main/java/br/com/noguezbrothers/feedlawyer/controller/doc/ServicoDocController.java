@@ -1,4 +1,4 @@
 package br.com.noguezbrothers.feedlawyer.controller.doc;
 
-public interface FuncionarioController {
+public interface ServicoDocController {
 }
