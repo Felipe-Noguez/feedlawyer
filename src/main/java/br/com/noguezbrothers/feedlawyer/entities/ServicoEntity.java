@@ -25,7 +25,7 @@ public class ServicoEntity {
     @Column(name = "descricao")
     private String descricao;
 
-    @OneToMany(mappedBy = "servicoEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "servicoEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
 
 
