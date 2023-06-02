@@ -10,10 +10,7 @@ import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
 import br.com.noguezbrothers.feedlawyer.enums.Situacao;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
-import br.com.noguezbrothers.feedlawyer.repository.CargoRepository;
-import br.com.noguezbrothers.feedlawyer.repository.FuncionarioCargoRepository;
 import br.com.noguezbrothers.feedlawyer.repository.FuncionarioRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,12 +26,8 @@ import java.util.stream.Collectors;
 public class FuncionarioService {
 
     private final FuncionarioRepository funcionarioRepository;
-    private final CargoRepository cargoRepository;
-    private final FuncionarioCargoRepository funcionarioCargoRepository;
     private final CargoService cargoService;
     private final FuncionarioCargoService funcionarioCargoService;
-    private final ObjectMapper objectMapper;
-
     private final PasswordEncoder passwordEncoder;
 
     public FuncionarioDTO cadastrarFuncionario(FuncionarioCreateDTO funcionarioCreateDTO) throws RegraDeNegocioException {
@@ -68,6 +61,7 @@ public class FuncionarioService {
 
         funcionarioRepository.save(funcionarioEntity);
 
+//        return new FuncionarioDTO(funcionarioEntity);
         return funcionarioConvertDTO(funcionarioEntity);
     }
 
@@ -131,7 +125,8 @@ public class FuncionarioService {
     }
 
     public FuncionarioLogadoDTO getLoggedUser() throws RegraDeNegocioException {
-        return objectMapper.convertValue(buscarPorIdFuncionario(getIdLoggerdUser()), FuncionarioLogadoDTO.class);
+//        return objectMapper.convertValue(buscarPorIdFuncionario(getIdLoggerdUser()), FuncionarioLogadoDTO.class);
+        return new FuncionarioLogadoDTO(buscarPorIdFuncionario(getIdLoggerdUser()));
     }
 
     private FuncionarioEntity funcionarioConverterEntity(FuncionarioCreateDTO funcionarioCreateDTO) {

@@ -2,7 +2,6 @@ package br.com.noguezbrothers.feedlawyer.controller;
 
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.funcionario.FuncionarioDTO;
-import br.com.noguezbrothers.feedlawyer.dto.logindto.LoginDTO;
 import br.com.noguezbrothers.feedlawyer.dto.paginacaodto.PageDTO;
 import br.com.noguezbrothers.feedlawyer.enums.Situacao;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
