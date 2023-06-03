@@ -1,7 +1,7 @@
 package br.com.noguezbrothers.feedlawyer.entities.pk;
 
-import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import br.com.noguezbrothers.feedlawyer.entities.ServicoEntity;
+import br.com.noguezbrothers.feedlawyer.entities.UsuarioEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +15,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Embeddable
-@Entity(name = "SERVICO_FUNCIONARIO")
-public class ServicoFuncionarioPK {
+@Entity(name = "SERVICO_USUARIO")
+public class ServicoUsuarioPK {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SERVICO_FUNCIONARIO_SEQUENCIA")
-    @SequenceGenerator(name = "SERVICO_FUNCIONARIO_SEQUENCIA", sequenceName = "SEQ_SERVICO_FUNCIONARIO", allocationSize = 1)
-    @Column(name = "id_servico_funcionario")
-    private Integer idServicoFucionario;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SERVICO_USUARIO_SEQUENCIA")
+    @SequenceGenerator(name = "SERVICO_USUARIO_SEQUENCIA", sequenceName = "SEQ_SERVICO_USUARIO", allocationSize = 1)
+    @Column(name = "id_servico_usuario")
+    private Integer idServicoUsuario;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -31,6 +31,6 @@ public class ServicoFuncionarioPK {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_funcionario")
-    private FuncionarioEntity servicoFuncionario;
+    @JoinColumn(name = "id_usuario")
+    private UsuarioEntity servicoUsuario;
 }

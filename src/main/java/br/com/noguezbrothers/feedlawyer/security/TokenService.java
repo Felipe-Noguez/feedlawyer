@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.security;
 
-import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
+import br.com.noguezbrothers.feedlawyer.entities.UsuarioEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,23 +26,23 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String getToken(FuncionarioEntity funcionarioEntity) {
+    public String getToken(UsuarioEntity usuarioEntity) {
         LocalDateTime dataLocalDateTime = LocalDateTime.now();
         Date date = Date.from(dataLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
         LocalDateTime localDateExperation = dataLocalDateTime.plusDays(Long.parseLong(expiration));
         Date dateExperition = Date.from(localDateExperation.atZone(ZoneId.systemDefault()).toInstant());
 
-        List<String> cargosDoUsuario = funcionarioEntity.getFuncionarioCargoPKS().stream()
-                .map(funcionarioCargoPK -> {
-                    return funcionarioCargoPK.getCargoEntity().getAuthority();
+        List<String> cargosDoUsuario = usuarioEntity.getUsuarioCargoPKS().stream()
+                .map(usuarioCargoPK -> {
+                    return usuarioCargoPK.getCargoEntity().getAuthority();
                 })
                 .toList();
 
         return Jwts.builder()
                 .setIssuer("feedlawyer-api")
-                .claim(Claims.ID, funcionarioEntity.getIdFuncionario().toString())
+                .claim(Claims.ID, usuarioEntity.getIdUsuario().toString())
                 .claim(CHAVE_CARGOS, cargosDoUsuario)
-                .claim("nome",funcionarioEntity.getNome())
+                .claim("nome", usuarioEntity.getNome())
                 .setIssuedAt(date)
                 .setExpiration(dateExperition)
                 .signWith(SignatureAlgorithm.HS256, secret)

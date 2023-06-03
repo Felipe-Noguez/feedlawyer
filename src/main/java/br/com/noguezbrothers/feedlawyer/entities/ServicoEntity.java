@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.entities;
 
-import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
+import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoUsuarioPK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class ServicoEntity {
     private String descricao;
 
     @OneToMany(mappedBy = "servicoEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
+    private Set<ServicoUsuarioPK> servicoUsuarioPKS;
 
 
     @OneToOne(mappedBy = "servicoAvaliacao", fetch =  FetchType.LAZY)

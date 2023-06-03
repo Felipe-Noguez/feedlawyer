@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                                 authz.antMatchers("/login/**").permitAll()
 //                                        .antMatchers("/aluno/**", "/trilha/**", "/tecnologia/**", "/modulo/**", "/programa/**", "/atividade/**").hasAnyRole("GESTAO_DE_PESSOAS", "INSTRUTOR", "ADMIN")
 //                                        .antMatchers("/trilha/**", "/aluno/**", "/vaga/**", "/cliente/**", "/reserva-alocacao/**").hasAnyRole("GESTAO_DE_PESSOAS", "GESTOR", "ADMIN")
-                                        .antMatchers("/funcionario/remover").hasRole("ADMINISTRADOR")
+                                        .antMatchers("/usuario/remover").hasRole("ADMINISTRADOR")
                                 .anyRequest().authenticated()
 
                 );

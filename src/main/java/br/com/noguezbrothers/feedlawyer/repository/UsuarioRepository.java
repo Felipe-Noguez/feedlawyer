@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.repository;
 
-import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
+import br.com.noguezbrothers.feedlawyer.entities.UsuarioEntity;
 import br.com.noguezbrothers.feedlawyer.enums.Situacao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,21 +11,21 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface FuncionarioRepository extends JpaRepository<FuncionarioEntity, Integer> {
+public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer> {
 
     @Query( "SELECT distinct func " +
-            " FROM FUNCIONARIO func " +
-            " inner join func.funcionarioCargoPKS fcar " +
+            " FROM USUARIO func " +
+            " inner join func.usuarioCargoPKS fcar " +
             " WHERE (:nome is null or UPPER(func.nome) LIKE UPPER(concat('%', :nome, '%'))) " +
             " AND (:cpf is null or func.cpf LIKE concat('%', :cpf, '%')) " +
             " AND (:especializacao is null or UPPER(func.especialicazao) LIKE UPPER(concat('%',:especializacao, '%'))) " +
-            " AND (:idFuncionario is null or :idFuncionario = func.idFuncionario)" +
+            " AND (:idUsuario is null or :idUsuario = func.idUsuario)" +
             " AND (:cargo is null or :cargo = fcar.cargoEntity.idPerfil ) " +
             " AND (:situacao is null or func.situacao = :situacao)" +
             "")
-    Page<FuncionarioEntity> listarFuncionarios(String nome, String cpf, String especializacao, Integer idFuncionario, Integer cargo, Situacao situacao, PageRequest pageRequest);
+    Page<UsuarioEntity> listarUsuario(String nome, String cpf, String especializacao, Integer idUsuario, Integer cargo, Situacao situacao, PageRequest pageRequest);
 
-    Optional<FuncionarioEntity> findByCpf(String cpf);
+    Optional<UsuarioEntity> findByCpf(String cpf);
 
-    Optional<FuncionarioEntity> findByLoginContainingIgnoreCase(String login);
+    Optional<UsuarioEntity> findByLoginContainingIgnoreCase(String login);
 }

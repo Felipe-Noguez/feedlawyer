@@ -1,7 +1,7 @@
 package br.com.noguezbrothers.feedlawyer.entities.pk;
 
 import br.com.noguezbrothers.feedlawyer.entities.CargoEntity;
-import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
+import br.com.noguezbrothers.feedlawyer.entities.UsuarioEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +15,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Embeddable
-@Entity(name = "FUNCIONARIO_CARGO")
-public class FuncionarioCargoPK {
+@Entity(name = "USUARIO_CARGO")
+public class UsuarioCargoPK {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FUNCIONARIO_CARGO_SEQUENCIA")
-    @SequenceGenerator(name = "FUNCIONARIO_CARGO_SEQUENCIA", sequenceName = "SEQ_FUNCIONARIO_CARGO", allocationSize = 1)
-    @Column(name = "id_funcionario_cargo")
-    private Integer idFuncionarioCargo;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_CARGO_SEQUENCIA")
+    @SequenceGenerator(name = "USUARIO_CARGO_SEQUENCIA", sequenceName = "SEQ_USUARIO_CARGO", allocationSize = 1)
+    @Column(name = "id_usuario_cargo")
+    private Integer idUsuarioCargo;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -31,6 +31,6 @@ public class FuncionarioCargoPK {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_funcionario")
-    private FuncionarioEntity funcionarioCargo;
+    @JoinColumn(name = "id_usuario")
+    private UsuarioEntity usuarioEntity;
 }

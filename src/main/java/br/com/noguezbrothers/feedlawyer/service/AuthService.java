@@ -1,7 +1,7 @@
 package br.com.noguezbrothers.feedlawyer.service;
 
 import br.com.noguezbrothers.feedlawyer.dto.logindto.LoginDTO;
-import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
+import br.com.noguezbrothers.feedlawyer.entities.UsuarioEntity;
 import br.com.noguezbrothers.feedlawyer.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +24,7 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         Object principal = authentication.getPrincipal();
-        FuncionarioEntity funcionarioEntity = (FuncionarioEntity) principal;
-        return tokenService.getToken(funcionarioEntity);
+        UsuarioEntity usuarioEntity = (UsuarioEntity) principal;
+        return tokenService.getToken(usuarioEntity);
     }
 }

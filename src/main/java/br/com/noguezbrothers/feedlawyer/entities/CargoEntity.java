@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.entities;
 
-import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
+import br.com.noguezbrothers.feedlawyer.entities.pk.UsuarioCargoPK;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +27,7 @@ public class CargoEntity implements GrantedAuthority {
     private String nome;
 
     @OneToMany(mappedBy = "cargoEntity", fetch = FetchType.LAZY)
-    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
-
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "FUNCIONARIO_CARGO",
-//            joinColumns = @JoinColumn(name = "ID_CARGO"),
-//            inverseJoinColumns = @JoinColumn(name = "ID_FUNCIONARIO")
-//    )
-//    private Set<FuncionarioEntity> usuarios;
+    private Set<UsuarioCargoPK> usuarioCargoPKS;
 
     @Override
     public String getAuthority() {

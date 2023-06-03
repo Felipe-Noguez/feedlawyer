@@ -1,6 +1,6 @@
-package br.com.noguezbrothers.feedlawyer.dto.funcionario;
+package br.com.noguezbrothers.feedlawyer.dto.usuario;
 
-import br.com.noguezbrothers.feedlawyer.dto.funcionariocargtodto.FuncionarioCargoCreateDTO;
+import br.com.noguezbrothers.feedlawyer.dto.usuariocargtodto.UsuarioCargoCreateDTO;
 import br.com.noguezbrothers.feedlawyer.enums.Situacao;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,11 +15,11 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FuncionarioCreateDTO {
+public class UsuarioCreateDTO {
 
     @Schema(description = "Nome do usuário", example = "Tom Sawyer")
     @NotBlank(message = "Campo obrigatório, verifique e tente novamente.")
-    private String funcionario;
+    private String usuario;
 
     @Schema(description = "CPF do usuário", example = "12365185436")
     @CPF(message = "CPF digitado não é válido, verifique e tente novamente.")
@@ -41,5 +41,5 @@ public class FuncionarioCreateDTO {
     @NotNull(message = "Campo obrigatório, verifique e tente novamente.")
     private Situacao situacao;
 
-    private Set<FuncionarioCargoCreateDTO> cargos;
+    private Set<UsuarioCargoCreateDTO> cargos;
 }

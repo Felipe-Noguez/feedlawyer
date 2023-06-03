@@ -1,6 +1,6 @@
 package br.com.noguezbrothers.feedlawyer.security;
 
-import br.com.noguezbrothers.feedlawyer.service.FuncionarioService;
+import br.com.noguezbrothers.feedlawyer.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService implements UserDetailsService {
 
-    private final FuncionarioService funcionarioService;
+    private final UsuarioService usuarioService;
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        return funcionarioService.buscarPorLogin(login)
+        return usuarioService.buscarPorLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("Login inválido!"));
     }
 }

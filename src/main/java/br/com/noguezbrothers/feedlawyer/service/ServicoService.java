@@ -2,9 +2,9 @@ package br.com.noguezbrothers.feedlawyer.service;
 
 import br.com.noguezbrothers.feedlawyer.dto.servico.ServicoCreateDTO;
 import br.com.noguezbrothers.feedlawyer.dto.servico.ServicoDTO;
-import br.com.noguezbrothers.feedlawyer.entities.FuncionarioEntity;
 import br.com.noguezbrothers.feedlawyer.entities.ServicoEntity;
-import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
+import br.com.noguezbrothers.feedlawyer.entities.UsuarioEntity;
+import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoUsuarioPK;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
 import br.com.noguezbrothers.feedlawyer.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,22 +18,21 @@ import java.util.Set;
 public class ServicoService {
 
     private final ServicoRepository servicoRepository;
-    private final FuncionarioService funcionarioService;
+    private final UsuarioService usuarioService;
 
     public ServicoDTO cadastrarServico(ServicoCreateDTO servicoCreateDTO) throws RegraDeNegocioException {
         ServicoEntity servicoEntity = new ServicoEntity();
-        ServicoFuncionarioPK servicoFuncionarioPK = new ServicoFuncionarioPK();
-//        FuncionarioLogadoDTO funcionarioLogado = funcionarioService.getLoggedUser();
-        FuncionarioEntity funcionarioEntity = funcionarioService.buscarPorIdFuncionario(funcionarioService.getLoggedUser().getIdFuncionario());
+        ServicoUsuarioPK servicoUsuarioPK = new ServicoUsuarioPK();
+        UsuarioEntity usuarioEntity = usuarioService.buscarPorIdUsuario(usuarioService.getLoggedUser().getIdUsuario());
 
         servicoEntity.setDescricao(servicoCreateDTO.getDescricao());
 
-        servicoFuncionarioPK.setServicoFuncionario(funcionarioEntity);
-        servicoFuncionarioPK.setServicoEntity(servicoEntity);
+        servicoUsuarioPK.setServicoUsuario(usuarioEntity);
+        servicoUsuarioPK.setServicoEntity(servicoEntity);
 
-        Set<ServicoFuncionarioPK> funcionarios = new HashSet<>();
-        funcionarios.add(servicoFuncionarioPK);
-        servicoEntity.setServicoFuncionarioPKS(funcionarios);
+        Set<ServicoUsuarioPK> usuarios = new HashSet<>();
+        usuarios.add(servicoUsuarioPK);
+        servicoEntity.setServicoUsuarioPKS(usuarios);
 
         servicoRepository.save(servicoEntity);
 

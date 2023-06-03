@@ -1,7 +1,7 @@
 package br.com.noguezbrothers.feedlawyer.entities;
 
-import br.com.noguezbrothers.feedlawyer.entities.pk.FuncionarioCargoPK;
-import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoFuncionarioPK;
+import br.com.noguezbrothers.feedlawyer.entities.pk.ServicoUsuarioPK;
+import br.com.noguezbrothers.feedlawyer.entities.pk.UsuarioCargoPK;
 import br.com.noguezbrothers.feedlawyer.enums.Situacao;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "FUNCIONARIO")
-public class FuncionarioEntity implements UserDetails {
+@Entity(name = "USUARIO")
+public class UsuarioEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FUNCIONARIO_SEQUENCIA")
-    @SequenceGenerator(name = "FUNCIONARIO_SEQUENCIA", sequenceName = "SEQ_FUNCIONARIO", allocationSize = 1)
-    @Column(name = "id_funcionario")
-    private Integer idFuncionario;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_SEQUENCIA")
+    @SequenceGenerator(name = "USUARIO_SEQUENCIA", sequenceName = "SEQ_USUARIO", allocationSize = 1)
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
     @Column(name = "nome")
     private String nome;
@@ -47,17 +47,17 @@ public class FuncionarioEntity implements UserDetails {
     @Enumerated(EnumType.ORDINAL)
     private Situacao situacao;
 
-    @OneToMany(mappedBy = "funcionarioCargo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<FuncionarioCargoPK> funcionarioCargoPKS;
+    @OneToMany(mappedBy = "usuarioEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<UsuarioCargoPK> usuarioCargoPKS;
 
-    @OneToMany(mappedBy = "servicoFuncionario", fetch = FetchType.LAZY)
-    private Set<ServicoFuncionarioPK> servicoFuncionarioPKS;
+    @OneToMany(mappedBy = "servicoUsuario", fetch = FetchType.LAZY)
+    private Set<ServicoUsuarioPK> servicoUsuarioPKS;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return funcionarioCargoPKS
+        return usuarioCargoPKS
                 .stream()
-                .map(FuncionarioCargoPK::getCargoEntity)
+                .map(UsuarioCargoPK::getCargoEntity)
                 .collect(Collectors.toSet());
     }
 
