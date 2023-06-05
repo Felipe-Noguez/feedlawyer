@@ -61,7 +61,6 @@ public class UsuarioService {
 
         usuarioRepository.save(usuarioEntity);
 
-//        return new UsuarioDTO(usuarioEntity);
         return usuarioConvertDTO(usuarioEntity);
     }
 
@@ -90,7 +89,7 @@ public class UsuarioService {
 
     public UsuarioDTO atualizarUsuario(UsuarioCreateDTO usuario) throws RegraDeNegocioException {
         UsuarioEntity usuarioEntity = buscarUsuarioPorCpf(usuario.getCpf());
-        usuarioEntity.setNome(usuario.getUsuario());
+        usuarioEntity.setNome(usuario.getNome());
         usuarioEntity.setCpf(usuario.getCpf());
         usuarioEntity.setEspecialicazao(usuario.getEspecializacao());
         usuarioEntity.setLogin(usuario.getLogin());
@@ -131,9 +130,10 @@ public class UsuarioService {
 
     private UsuarioEntity usuarioConverterEntity(UsuarioCreateDTO usuarioCreateDTO) {
         return new UsuarioEntity(null,
-                usuarioCreateDTO.getUsuario(),
+                usuarioCreateDTO.getNome(),
                 usuarioCreateDTO.getCpf(),
                 usuarioCreateDTO.getEspecializacao(),
+                usuarioCreateDTO.getEmail(),
                 usuarioCreateDTO.getLogin(),
                 usuarioCreateDTO.getSenha(),
                 usuarioCreateDTO.getSituacao(),

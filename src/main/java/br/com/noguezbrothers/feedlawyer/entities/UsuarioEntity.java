@@ -37,6 +37,9 @@ public class UsuarioEntity implements UserDetails {
     @Column(name = "especializacao")
     private String especialicazao;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "login")
     private String login;
 

@@ -19,7 +19,7 @@ public class UsuarioCreateDTO {
 
     @Schema(description = "Nome do usuário", example = "Tom Sawyer")
     @NotBlank(message = "Campo obrigatório, verifique e tente novamente.")
-    private String usuario;
+    private String nome;
 
     @Schema(description = "CPF do usuário", example = "12365185436")
     @CPF(message = "CPF digitado não é válido, verifique e tente novamente.")
@@ -28,6 +28,10 @@ public class UsuarioCreateDTO {
     @Schema(description = "Especialidade do funcionario", example = "Advogado ...")
     @NotBlank(message = "Campo obrigatório, verifique e tente novamente.")
     private String especializacao;
+
+    @Schema(description = "E-mail do usuário", example = "tom.sawyer@rush.com")
+    @NotBlank(message = "Campo obrigatório, verifique e tente novamente.")
+    private String email;
 
     @Schema(description = "Campo de login do usuário", example = "tom.sawyer")
     @NotBlank(message = "Campo obrigatório, verifique e tente novamente.")
