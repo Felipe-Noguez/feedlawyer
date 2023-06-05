@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="noguez">
+        <sql >
+--             create user FEEDLAWYER;
+--
+--             create role FEEDLAWYER login;
+--
+--             create schema FEEDLAWYER;
+--
+--             GRANT CONTROL ON schema [FEEDLAWYER] to [FEEDLAWYER];
+--
+--             GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA FEEDLAWYER TO FEEDLAWYER;
+--
+--             GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA FEEDLAWYER TO FEEDLAWYER;
+
+            CREATE TABLE USUARIO (
+                     id_usuario bigserial NOT NULL,
+                     nome text NOT NULL,
+                     cpf text NOT NULL UNIQUE,
+                     especializacao text NOT NULL,
+                     login text UNIQUE,
+                     senha text,
+                     situacao smallint,
+                     email text NOT NULL,
+                     PRIMARY KEY (id_usuario)
+            );
+
+            CREATE TABLE CARGO (
+                   id_perfil bigserial not null,
+                   nome text not null unique,
+                   PRIMARY KEY (id_perfil)
+            );
+
+            CREATE TABLE USUARIO_CARGO (
+                   id_usuario_cargo bigserial not null,
+                   id_cargo integer,
+                   id_usuario integer,
+                   PRIMARY KEY (id_usuario_cargo),
+                   CONSTRAINT FK_USUARIO_CARGO
+                       FOREIGN KEY (id_usuario)
+                           REFERENCES USUARIO(id_usuario),
+                   CONSTRAINT FK_CARGO_USUARIO
+                       FOREIGN KEY (id_cargo)
+                           REFERENCES CARGO(id_perfil)
+            );
+
+            CREATE TABLE AVALIACAO (
+                   id_avaliacao bigserial not null,
+                   descricao text not null,
+                   nome_advogado text not null,
+                   nota_avaliacao integer not null,
+                   sugestao text,
+                   situacao smallint,
+                   PRIMARY KEY (id_avaliacao)
+            );
+
+            CREATE TABLE SERVICO (
+                 id_servico bigserial not null,
+                 descricao text,
+                 situacao smallint,
+                 id_avaliacao integer,
+                 PRIMARY KEY (id_servico),
+                 CONSTRAINT FK_AVALIACAO_SERVICO
+                     FOREIGN KEY (id_avaliacao)
+                         REFERENCES AVALIACAO(id_avaliacao)
+            );
+
+            CREATE TABLE SERVICO_USUARIO (
+                 id_servico_usuario bigserial not null,
+                 id_servico integer,
+                 id_usuario integer,
+                 PRIMARY KEY (id_servico_usuario),
+                 FOREIGN KEY (id_servico) REFERENCES SERVICO(id_servico),
+                 FOREIGN KEY (id_usuario) REFERENCES USUARIO(id_usuario)
+            );
+
+            CREATE SEQUENCE SEQ_CARGO
+                START WITH 1
+                INCREMENT BY 1;
+
+            CREATE SEQUENCE SEQ_AVALIACAO
+                START WITH 1
+                INCREMENT BY 1;
+
+            CREATE SEQUENCE SEQ_USUARIO
+                START WITH 1
+                INCREMENT BY 1;
+
+            CREATE SEQUENCE SEQ_SERVICO
+                START WITH 1
+                INCREMENT BY 1;
+
+            CREATE SEQUENCE SEQ_SERVICO_USUARIO
+                START WITH 1
+                INCREMENT BY 1;
+
+            CREATE SEQUENCE SEQ_USUARIO_CARGO
+                START WITH 1
+                INCREMENT BY 1;
+
+            insert into CARGO(nome) values ('ROLE_ADMINISTRADOR');
+            insert into CARGO(nome) values ('ROLE_ADVOGADO');
+            insert into CARGO(nome) values ('ROLE_CLIENTE');
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
