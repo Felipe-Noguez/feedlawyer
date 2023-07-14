@@ -11,16 +11,10 @@ import lombok.NoArgsConstructor;
 public class AvaliacaoCreateDTO {
 
     private String descricao;
-
-    private String nomeAdvogado;
-
+    
     private Double notaAvaliacao;
 
-    private String nomeCliente;
-
     private String sugestao;
-
-    private String emailCliente;
 
     private ServicoAvaliacaoDTO servicoAvaliacaoDTO;
 }
