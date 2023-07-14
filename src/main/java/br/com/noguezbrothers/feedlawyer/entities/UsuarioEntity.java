@@ -53,8 +53,11 @@ public class UsuarioEntity implements UserDetails {
     @OneToMany(mappedBy = "usuarioEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UsuarioCargoPK> usuarioCargoPKS;
 
-    @OneToMany(mappedBy = "servicoUsuario", fetch = FetchType.LAZY)
-    private Set<ServicoUsuarioPK> servicoUsuarioPKS;
+    @OneToMany(mappedBy = "usuarioEntityFuncionario", fetch = FetchType.LAZY)
+    private Set<ServicoUsuarioPK> servicoUsuarioFuncionario;
+
+    @OneToMany(mappedBy = "usuarioEntityCliente", fetch = FetchType.LAZY)
+    private Set<ServicoUsuarioPK> servicoUsuarioCliente;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

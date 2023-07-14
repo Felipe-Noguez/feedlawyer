@@ -31,6 +31,11 @@ public class ServicoUsuarioPK {
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario")
-    private UsuarioEntity servicoUsuario;
+    @JoinColumn(name = "id_funcionario")
+    private UsuarioEntity usuarioEntityFuncionario;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente")
+    private UsuarioEntity usuarioEntityCliente;
 }

@@ -1,5 +1,7 @@
 package br.com.noguezbrothers.feedlawyer.entities;
 
+import br.com.noguezbrothers.feedlawyer.enums.Situacao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +32,15 @@ public class AvaliacaoEntity {
     @Column(name = "nota_avaliacao")
     private Double notaAvaliacao;
 
-    @Column(name = "nome_cliente")
-    private String nomeCliente;
-
     @Column(name = "sugestao")
     private String sugestao;
 
-    @Column(name = "email_cliente")
-    private String emailCliente;
+    @Column(name = "situacao")
+    @Enumerated(EnumType.ORDINAL)
+    private Situacao situacao;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "id_servico")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ServicoEntity servicoAvaliacao;
 }
