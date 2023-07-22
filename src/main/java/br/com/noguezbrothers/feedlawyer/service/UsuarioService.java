@@ -138,6 +138,7 @@ public class UsuarioService {
                 usuarioCreateDTO.getSenha(),
                 usuarioCreateDTO.getSituacao(),
                 new HashSet<>(),
+                new HashSet<>(),
                 new HashSet<>());
     }
 
