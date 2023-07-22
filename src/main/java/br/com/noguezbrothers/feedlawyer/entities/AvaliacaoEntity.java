@@ -41,6 +41,6 @@ public class AvaliacaoEntity {
 
     @JsonIgnore
     @JoinColumn(name = "id_servico")
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "avaliacaoEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ServicoEntity servicoAvaliacao;
 }

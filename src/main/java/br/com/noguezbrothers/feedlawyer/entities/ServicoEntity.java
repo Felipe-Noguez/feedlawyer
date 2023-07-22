@@ -37,7 +37,7 @@ public class ServicoEntity {
     private Set<ServicoUsuarioPK> servicoUsuarioPKS;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "id_avaliacao")
     private AvaliacaoEntity avaliacaoEntity;
 
