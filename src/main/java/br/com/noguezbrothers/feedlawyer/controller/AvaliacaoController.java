@@ -39,4 +39,22 @@ public class AvaliacaoController {
                                                               @RequestParam(defaultValue = "10") Integer size) throws RegraDeNegocioException {
         return new ResponseEntity<>(avaliacaoService.listarAvaliacoes(nomeCliente, idAvaliacao, descricao, nomeAdvogado, notaAvaliacao, sugestao, situacao, page, size), HttpStatus.OK);
     }
+
+//    @Override
+    @PutMapping("/{idAvaliacao}/desativar")
+    public ResponseEntity<Void> desativarAvaliacao(@PathVariable("idAvaliacao") Integer idAvaliacao) throws RegraDeNegocioException {
+
+        avaliacaoService.desativarAvaliacao(idAvaliacao);
+
+        return ResponseEntity.noContent().build();
+    }
+
+//    @Override
+    @DeleteMapping("/{idAvaliacao}/remover")
+    public ResponseEntity<Void> removerAvaliacao(@PathVariable("idAvaliacao") Integer idAvaliacao) throws RegraDeNegocioException {
+
+        avaliacaoService.removerAvaliacao(idAvaliacao);
+
+        return ResponseEntity.noContent().build();
+    }
 }

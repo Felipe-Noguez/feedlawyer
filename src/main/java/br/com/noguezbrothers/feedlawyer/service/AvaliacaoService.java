@@ -11,7 +11,6 @@ import br.com.noguezbrothers.feedlawyer.enums.Situacao;
 import br.com.noguezbrothers.feedlawyer.exceptions.AvaliacaoException;
 import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
 import br.com.noguezbrothers.feedlawyer.repository.AvaliacaoRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,17 +26,21 @@ public class AvaliacaoService {
     private final AvaliacaoRepository avaliacaoRepository;
     private final ServicoService servicoService;
     private final UsuarioService usuarioService;
-    private final ObjectMapper objectMapper;
 
     public AvaliacaoDTO cadastrarAvaliacao(AvaliacaoCreateDTO avaliacaoCreateDTO) throws RegraDeNegocioException {
         try {
-            AvaliacaoEntity avaliacaoEntity = converterAvaliacaoEntity(avaliacaoCreateDTO);
-            ServicoEntity servicoEntity = servicoService.getServicoEntityById(avaliacaoCreateDTO.getServicoAvaliacaoDTO().getIdServico());
+            ServicoEntity servicoEntity = servicoService.buscarServicoEntityById(avaliacaoCreateDTO.getServicoAvaliacaoDTO().getIdServico());
+            if (servicoEntity.getAvaliacaoEntity().getIdAvaliacao() != null) {
+                throw new AvaliacaoException("Este serviço já foi avaliado, entre em contato com o suporte");
+            }
+
             UsuarioEntity idUsuarioLogado = usuarioService.buscarPorIdUsuario(usuarioService.getLoggedUser().getIdUsuario());
 
             if (!servicoEntity.getCliente().getIdUsuario().equals(idUsuarioLogado.getIdUsuario())) {
                 throw new RegraDeNegocioException("O serviço não pertence ao usuário atual.");
             }
+
+            AvaliacaoEntity avaliacaoEntity = converterAvaliacaoEntity(avaliacaoCreateDTO);
 
             avaliacaoEntity.setSituacao(Situacao.ATIVO);
             avaliacaoEntity.setNomeAdvogado(servicoEntity.getFuncionario().getNome());
@@ -65,7 +68,13 @@ public class AvaliacaoService {
 
             List<AvaliacaoDTO> avaliacoesDTO = avaliacoes.getContent()
                     .stream()
-                    .map(avaliacao -> objectMapper.convertValue(avaliacao, AvaliacaoDTO.class))
+                    .map(avaliacaoEntity -> {
+                        try {
+                            return converterAvaliacaoDTO(avaliacaoEntity);
+                        } catch (RegraDeNegocioException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    })
                     .collect(Collectors.toList());
 
             if (avaliacoesDTO.isEmpty()) {
@@ -81,6 +90,27 @@ public class AvaliacaoService {
         } catch (AvaliacaoException ex) {
             throw new AvaliacaoException("Erro ao listar avaliações: " + ex.getMessage());
         }
+    }
+
+    public void desativarAvaliacao(Integer idAvaliacao) throws RegraDeNegocioException {
+        AvaliacaoEntity avaliacao = buscarAvaliacaoPorId(idAvaliacao);
+
+        if (avaliacao.getSituacao().equals(Situacao.INATIVO)) {
+            throw new AvaliacaoException("Avaliação já desativada");
+        }
+
+        avaliacao.setSituacao(Situacao.INATIVO);
+
+        avaliacaoRepository.save(avaliacao);
+    }
+
+    public void removerAvaliacao(Integer idAvaliacao) throws RegraDeNegocioException {
+        avaliacaoRepository.delete(buscarAvaliacaoPorId(idAvaliacao));
+    }
+
+    public AvaliacaoEntity buscarAvaliacaoPorId(Integer idAvaliacao) throws RegraDeNegocioException {
+        return avaliacaoRepository.findById(idAvaliacao)
+                .orElseThrow(() -> new RegraDeNegocioException("Avaliação não encontrada!"));
     }
 
     public AvaliacaoEntity converterAvaliacaoEntity(AvaliacaoCreateDTO avaliacaoCreateDTO) {
@@ -101,6 +131,7 @@ public class AvaliacaoService {
         avaliacaoDTO.setNomeCliente(avaliacaoEntity.getServicoAvaliacao().getCliente().getNome());
         avaliacaoDTO.setSugestao(avaliacaoEntity.getSugestao());
         avaliacaoDTO.setEmailCliente(avaliacaoEntity.getServicoAvaliacao().getCliente().getEmail());
+        avaliacaoDTO.setSituacao(avaliacaoEntity.getSituacao());
 
         ServicoDTO servicoDTO = new ServicoDTO();
         servicoDTO.setIdServico(avaliacaoEntity.getServicoAvaliacao().getIdServico());
