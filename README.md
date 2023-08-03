@@ -1,4 +1,4 @@
-# feedlawyer-api (Em construção)
+# feedlawyer-api (Em TESTE)
 
 # API desenvolvida para colocar em prática estudos em Java com Springboot
 
@@ -10,11 +10,14 @@
 ## Tecnologias utilizadas no desenvolvimento
 * Java JDK 17.0.4
 * Spring boot
+* Spring Data JPA
+* Spring Security
 * Maven 4.0.0
 * Swagger 1.6.8
 * Banco de dados Postgres (Elephantsql - https://www.elephantsql.com/)
 * Lombok
 * JWT
+* Liquibase
 
 
 ## Ferramenta utilizada no desenvolvimento
