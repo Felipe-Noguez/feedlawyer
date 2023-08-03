@@ -3,6 +3,7 @@ package br.com.noguezbrothers.feedlawyer.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,11 +28,12 @@ public class SecurityConfiguration {
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) ->
-                                //autorizações -> auth
-                                authz.antMatchers("/login/**").permitAll()
-//                                        .antMatchers("/aluno/**", "/trilha/**", "/tecnologia/**", "/modulo/**", "/programa/**", "/atividade/**").hasAnyRole("GESTAO_DE_PESSOAS", "INSTRUTOR", "ADMIN")
-//                                        .antMatchers("/trilha/**", "/aluno/**", "/vaga/**", "/cliente/**", "/reserva-alocacao/**").hasAnyRole("GESTAO_DE_PESSOAS", "GESTOR", "ADMIN")
-                                        .antMatchers("/usuario/remover").hasRole("ADMINISTRADOR")
+                                authz.antMatchers("/", "/login/acessar").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/avaliacoes/cadastrar").hasRole("CLIENTE")
+                                        .antMatchers(HttpMethod.POST, "/usuario/cadastar", "/servicos/cadastrar").hasAnyRole("ADVOGADO", "ADMINISTRADOR")
+                                        .antMatchers(HttpMethod.GET, "/usuario/listar", "/servicos/listar", "/avaliacoes/listar").hasAnyRole("ADVOGADO", "ADMINISTRADOR")
+                                        .antMatchers(HttpMethod.PUT, "/usuario/atualizar", "/servicos/**/desativar", "/avaliacoes/**/desativar").hasAnyRole("ADVOGADO", "ADMINISTRADOR")
+                                        .antMatchers(HttpMethod.DELETE, "/usuario/remover", "/servicos/**/remover", "/avaliacoes/**/remover").hasRole("ADMINISTRADOR")
                                 .anyRequest().authenticated()
 
                 );
@@ -70,4 +72,3 @@ public class SecurityConfiguration {
         return configuration.getAuthenticationManager();
     }
 }
-
