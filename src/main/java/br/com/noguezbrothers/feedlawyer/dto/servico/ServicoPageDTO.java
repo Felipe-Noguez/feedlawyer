@@ -6,7 +6,6 @@ import br.com.noguezbrothers.feedlawyer.exceptions.RegraDeNegocioException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Optional;
 
@@ -40,24 +39,4 @@ public class ServicoPageDTO {
             this.servicoAvaDTO = Optional.empty();
         }
     }
-//    public ServicoPageDTO(ServicoEntity servicoEntity) throws RegraDeNegocioException {
-//        this.idServico = servicoEntity.getIdServico();
-//        this.descricao = servicoEntity.getDescricao();
-//
-//        ServicoAvaDTO servicoAvaDTO = new ServicoAvaDTO();
-//        servicoAvaDTO.setIdAvaliacao(servicoEntity.getAvaliacaoEntity().getIdAvaliacao());
-//        servicoAvaDTO.setDescricao(servicoEntity.getAvaliacaoEntity().getDescricao());
-//        servicoAvaDTO.setNomeAdvogado(servicoEntity.getAvaliacaoEntity().getNomeAdvogado());
-//        servicoAvaDTO.setNotaAvaliacao(servicoEntity.getAvaliacaoEntity().getNotaAvaliacao());
-//        servicoAvaDTO.setNomeCliente(servicoEntity.getAvaliacaoEntity().getServicoAvaliacao().getCliente().getNome());
-//        servicoAvaDTO.setSugestao(servicoEntity.getAvaliacaoEntity().getSugestao());
-//        servicoAvaDTO.setEmailCliente(servicoEntity.getAvaliacaoEntity().getServicoAvaliacao().getCliente().getEmail());
-//        servicoAvaDTO.setSituacao(servicoEntity.getAvaliacaoEntity().getSituacao());
-//
-//        this.servicoAvaDTO = servicoAvaDTO;
-//    }
-
-//    public ServicoPageDTO(ServicoEntity servicoEntity) {
-//        BeanUtils.copyProperties(servicoEntity, this);
-//    }
 }
