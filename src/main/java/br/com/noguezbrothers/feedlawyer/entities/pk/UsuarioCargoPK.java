@@ -25,7 +25,7 @@ public class UsuarioCargoPK {
     private Integer idUsuarioCargo;
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cargo")
     private CargoEntity cargoEntity;
 
