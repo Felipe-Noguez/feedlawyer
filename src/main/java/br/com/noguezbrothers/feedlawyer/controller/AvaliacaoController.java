@@ -22,7 +22,7 @@ public class AvaliacaoController {
 
     private final AvaliacaoService avaliacaoService;
 
-    @PostMapping
+    @PostMapping("/cadastrar")
     public ResponseEntity<AvaliacaoDTO> cadastrarAvaliacao (@RequestBody AvaliacaoCreateDTO avaliacaoCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(avaliacaoService.cadastrarAvaliacao(avaliacaoCreateDTO), HttpStatus.CREATED);
     }

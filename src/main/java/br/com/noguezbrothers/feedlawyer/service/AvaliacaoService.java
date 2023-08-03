@@ -30,7 +30,7 @@ public class AvaliacaoService {
     public AvaliacaoDTO cadastrarAvaliacao(AvaliacaoCreateDTO avaliacaoCreateDTO) throws RegraDeNegocioException {
         try {
             ServicoEntity servicoEntity = servicoService.buscarServicoEntityById(avaliacaoCreateDTO.getServicoAvaliacaoDTO().getIdServico());
-            if (servicoEntity.getAvaliacaoEntity().getIdAvaliacao() != null) {
+            if (servicoEntity.getAvaliacaoEntity() != null && servicoEntity.getAvaliacaoEntity().getIdAvaliacao() != null) {
                 throw new AvaliacaoException("Este serviço já foi avaliado, entre em contato com o suporte");
             }
 
