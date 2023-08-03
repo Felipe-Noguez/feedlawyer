@@ -23,7 +23,7 @@ public class ServicoController {
 
     private final ServicoService servicoService;
 
-    @PostMapping
+    @PostMapping("/cadastrar")
     public ResponseEntity<ServicoDTO> cadastrarServico(@RequestBody ServicoCreateDTO servicoCreateDTO) throws RegraDeNegocioException {
         return new ResponseEntity<>(servicoService.cadastrarServico(servicoCreateDTO), HttpStatus.CREATED);
     }
