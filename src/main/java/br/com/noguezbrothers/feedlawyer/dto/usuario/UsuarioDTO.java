@@ -18,6 +18,7 @@ public class UsuarioDTO {
     private Integer idUsuario;
     private String nomeUsuario;
     private String especializacao;
+    private String email;
     private String login;
     private String cpf;
     private Situacao situacao;
