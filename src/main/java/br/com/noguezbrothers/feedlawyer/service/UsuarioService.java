@@ -87,9 +87,9 @@ public class UsuarioService {
                 usuariosDTO);
     }
 
-    public UsuarioDTO atualizarUsuario(UsuarioCreateDTO usuario) throws RegraDeNegocioException {
-        UsuarioEntity usuarioEntity = buscarUsuarioPorCpf(usuario.getCpf());
-        usuarioEntity.setNome(usuario.getNome());
+    public UsuarioDTO atualizarUsuario(UsuarioCreateDTO usuario, Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = buscarPorIdUsuario(idUsuario);
+        usuarioEntity.setNome(usuario.getNomeUsuario());
         usuarioEntity.setCpf(usuario.getCpf());
         usuarioEntity.setEspecialicazao(usuario.getEspecializacao());
         usuarioEntity.setLogin(usuario.getLogin());
@@ -101,8 +101,8 @@ public class UsuarioService {
         return usuarioConvertDTO(usuarioEntity);
     }
 
-    public void removerUsuario(String cpf) throws RegraDeNegocioException {
-        usuarioRepository.delete(buscarUsuarioPorCpf(cpf));
+    public void removerUsuario(Integer idUsuario) throws RegraDeNegocioException {
+        usuarioRepository.delete(this.buscarPorIdUsuario(idUsuario));
     }
 
     public UsuarioEntity buscarUsuarioPorCpf(String cpf) throws RegraDeNegocioException {
@@ -113,6 +113,12 @@ public class UsuarioService {
     public UsuarioEntity buscarPorIdUsuario(Integer idUsuario) throws RegraDeNegocioException {
         return usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado."));
+    }
+
+    public UsuarioDTO getUsuarioById(Integer idUsuario) throws RegraDeNegocioException {
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RegraDeNegocioException("Usuario não encontrado."));
+        return usuarioConvertDTO(usuarioEntity);
     }
 
     public Optional<UsuarioEntity> buscarPorLogin(String login) {
@@ -130,7 +136,7 @@ public class UsuarioService {
 
     private UsuarioEntity usuarioConverterEntity(UsuarioCreateDTO usuarioCreateDTO) {
         return new UsuarioEntity(null,
-                usuarioCreateDTO.getNome(),
+                usuarioCreateDTO.getNomeUsuario(),
                 usuarioCreateDTO.getCpf(),
                 usuarioCreateDTO.getEspecializacao(),
                 usuarioCreateDTO.getEmail(),
@@ -152,6 +158,7 @@ public class UsuarioService {
         return new UsuarioDTO(usuarioEntity.getIdUsuario(),
                 usuarioEntity.getNome(),
                 usuarioEntity.getEspecialicazao(),
+                usuarioEntity.getEmail(),
                 usuarioEntity.getLogin(),
                 usuarioEntity.getCpf(),
                 usuarioEntity.getSituacao(),

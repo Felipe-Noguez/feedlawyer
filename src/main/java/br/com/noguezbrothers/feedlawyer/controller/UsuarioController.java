@@ -43,14 +43,19 @@ public class UsuarioController {
         return new ResponseEntity<>(usuarioService.listarUsuarios(nome, cpf, especializacao, idUsuario, cargo, situacao, page, size), HttpStatus.OK);
     }
 
-    @PutMapping("/atualizar/{cpf}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
-        return  new ResponseEntity<>(usuarioService.atualizarUsuario(usuarioCreateDTO), HttpStatus.OK);
+    @GetMapping("/{id-usuario}")
+    public ResponseEntity<UsuarioDTO> buscarPorIdUsuario(@PathVariable("id-usuario") Integer idUsuario) throws RegraDeNegocioException {
+        return new ResponseEntity<>(usuarioService.getUsuarioById(idUsuario), HttpStatus.OK);
     }
 
-    @DeleteMapping("/remover/{cpf}")
-    public ResponseEntity<Void> removerUsuario(@PathVariable("cpf") String cpf) throws RegraDeNegocioException {
-        usuarioService.removerUsuario(cpf);
+    @PutMapping("/atualizar/{id-usuario}")
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable("id-usuario") Integer idUsuario, @RequestBody UsuarioCreateDTO usuarioCreateDTO) throws RegraDeNegocioException {
+        return  new ResponseEntity<>(usuarioService.atualizarUsuario(usuarioCreateDTO, idUsuario), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/remover/{idUsuario}")
+    public ResponseEntity<Void> removerUsuario(@PathVariable("idUsuario") Integer idUsuario) throws RegraDeNegocioException {
+        usuarioService.removerUsuario(idUsuario);
         return ResponseEntity.noContent().build();
     }
 }
