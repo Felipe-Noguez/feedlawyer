@@ -21,6 +21,7 @@ spec:
       containers:
       - name: feedlawywer
         image: felipenoguez/feedlawyer:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
 
