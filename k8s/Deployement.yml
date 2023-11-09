@@ -20,7 +20,7 @@ metadata:
     spec:
       containers:
         - name: feedlawywer
-          image: felipenoguez/feedlawyer:1
+          image: felipenoguez/feedlawyer:latest
           ports:
             - containerPort: 8080
 
