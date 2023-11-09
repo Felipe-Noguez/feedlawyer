@@ -8,7 +8,7 @@ RUN mkdir /target && chmod 777 /target
 
 # Copy the source code to the container
 COPY pom.xml .
-# COPY target/feedlawyer-0.0.1-SNAPSHOT.jar /target
+COPY target/feedlawyer-0.0.1-SNAPSHOT.jar /target
 
 # Build the application with Maven
 RUN mvn package
