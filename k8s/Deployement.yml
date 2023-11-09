@@ -22,7 +22,7 @@ spec:
       - name: feedlawywer
         image: felipenoguez/feedlawyer:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 
 ---
 
@@ -35,8 +35,8 @@ spec:
   selector:
     app: feedlawywer
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 80
+      targetPort: 80
 
 ---
 
@@ -57,5 +57,5 @@ spec:
               service:
                 name: feedlawywer-service
                 port:
-                  number: 8080
+                  number: 80
 
